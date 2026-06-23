@@ -1,0 +1,665 @@
+import samsungImg from "@assets/1000501024_1780116301364.jpg";
+import iphoneImg from "@assets/1000501026_1780116290670.jpg";
+import lcdImg from "@assets/HONOR_LCD_1780432937128.webp";
+
+export type Product = {
+  id: number;
+  name: string;
+  price: number;
+  category: "samsung" | "iphone" | "honor" | "tecno" | "redmi";
+  imageUrl: string;
+};
+
+export const products: Product[] = [
+  // Samsung (10)
+  { id: 1,  name: "Samsung A04",    price: 250, category: "samsung", imageUrl: samsungImg },
+  { id: 2,  name: "Samsung A05",    price: 250, category: "samsung", imageUrl: samsungImg },
+  { id: 3,  name: "Samsung A12",    price: 250, category: "samsung", imageUrl: samsungImg },
+  { id: 4,  name: "Samsung A125",   price: 250, category: "samsung", imageUrl: samsungImg },
+  { id: 5,  name: "Samsung A13 4G", price: 350, category: "samsung", imageUrl: samsungImg },
+  { id: 6,  name: "Samsung A13 5G", price: 350, category: "samsung", imageUrl: samsungImg },
+  { id: 7,  name: "Samsung A16 4G", price: 350, category: "samsung", imageUrl: samsungImg },
+  { id: 8,  name: "Samsung A16 5G", price: 350, category: "samsung", imageUrl: samsungImg },
+  { id: 9,  name: "Samsung A24",    price: 400, category: "samsung", imageUrl: samsungImg },
+  { id: 10, name: "Samsung A53 5G", price: 500, category: "samsung", imageUrl: samsungImg },
+
+  // iPhone (17)
+  { id: 11, name: "iPhone 11",         price: 450, category: "iphone", imageUrl: iphoneImg },
+  { id: 12, name: "iPhone 11 Pro",     price: 550, category: "iphone", imageUrl: iphoneImg },
+  { id: 13, name: "iPhone 11 Pro Max", price: 600, category: "iphone", imageUrl: iphoneImg },
+  { id: 14, name: "iPhone 12",         price: 450, category: "iphone", imageUrl: iphoneImg },
+  { id: 15, name: "iPhone 12 Pro",     price: 550, category: "iphone", imageUrl: iphoneImg },
+  { id: 16, name: "iPhone 12 Pro Max", price: 600, category: "iphone", imageUrl: iphoneImg },
+  { id: 17, name: "iPhone 12 Mini",    price: 400, category: "iphone", imageUrl: iphoneImg },
+  { id: 18, name: "iPhone 13",         price: 450, category: "iphone", imageUrl: iphoneImg },
+  { id: 19, name: "iPhone 13 Pro",     price: 550, category: "iphone", imageUrl: iphoneImg },
+  { id: 20, name: "iPhone 13 Pro Max", price: 600, category: "iphone", imageUrl: iphoneImg },
+  { id: 21, name: "iPhone 13 Mini",    price: 400, category: "iphone", imageUrl: iphoneImg },
+  { id: 22, name: "iPhone 14",         price: 500, category: "iphone", imageUrl: iphoneImg },
+  { id: 23, name: "iPhone 14 Pro",     price: 600, category: "iphone", imageUrl: iphoneImg },
+  { id: 24, name: "iPhone 14 Plus",    price: 550, category: "iphone", imageUrl: iphoneImg },
+  { id: 25, name: "iPhone 15",         price: 550, category: "iphone", imageUrl: iphoneImg },
+  { id: 26, name: "iPhone 15 Pro",     price: 700, category: "iphone", imageUrl: iphoneImg },
+  { id: 27, name: "iPhone 15 Pro Max", price: 750, category: "iphone", imageUrl: iphoneImg },
+
+  // Honor (10)
+  { id: 28, name: "Honor X6",       price: 300, category: "honor", imageUrl: lcdImg },
+  { id: 29, name: "Honor X6a",      price: 300, category: "honor", imageUrl: lcdImg },
+  { id: 30, name: "Honor X7",       price: 320, category: "honor", imageUrl: lcdImg },
+  { id: 31, name: "Honor X7a",      price: 320, category: "honor", imageUrl: lcdImg },
+  { id: 32, name: "Honor X8",       price: 340, category: "honor", imageUrl: lcdImg },
+  { id: 33, name: "Honor X8a",      price: 340, category: "honor", imageUrl: lcdImg },
+  { id: 34, name: "Honor X9",       price: 360, category: "honor", imageUrl: lcdImg },
+  { id: 35, name: "Honor X9a",      price: 360, category: "honor", imageUrl: lcdImg },
+  { id: 36, name: "Honor 90 Lite",  price: 380, category: "honor", imageUrl: lcdImg },
+  { id: 37, name: "Honor 200 Lite", price: 400, category: "honor", imageUrl: lcdImg },
+
+  // Tecno (5)
+  { id: 38, name: "Tecno Spark 10", price: 300, category: "tecno", imageUrl: lcdImg },
+  { id: 39, name: "Tecno Spark 20", price: 300, category: "tecno", imageUrl: lcdImg },
+  { id: 40, name: "Tecno Pop 8",    price: 310, category: "tecno", imageUrl: lcdImg },
+  { id: 41, name: "Tecno Camon 20", price: 320, category: "tecno", imageUrl: lcdImg },
+  { id: 42, name: "Tecno Pova 5",   price: 330, category: "tecno", imageUrl: lcdImg },
+
+  // Redmi (3)
+  { id: 43, name: "Redmi 12",      price: 300, category: "redmi", imageUrl: lcdImg },
+  { id: 44, name: "Redmi 13C",     price: 300, category: "redmi", imageUrl: lcdImg },
+  { id: 45, name: "Redmi Note 13", price: 320, category: "redmi", imageUrl: lcdImg },
+];import { createContext, useContext, useState, ReactNode } from "react";
+import { Product } from "../data/products";
+
+export interface CartItem extends Product {
+  quantity: number;
+}
+
+interface CartContextType {
+  cartItems: CartItem[];
+  cartCount: number;
+  cartTotal: number;
+  isCartOpen: boolean;
+  setIsCartOpen: (open: boolean) => void;
+  addToCart: (product: Product) => void;
+  removeFromCart: (id: number) => void;
+  updateQty: (id: number, qty: number) => void;
+  clearCart: () => void;
+}
+
+const CartContext = createContext<CartContextType | undefined>(undefined);
+
+export function CartProvider({ children }: { children: ReactNode }) {
+  const [cartItems, setCartItems] = useState<CartItem[]>([]);
+  const [isCartOpen, setIsCartOpen] = useState(false);
+
+  const cartCount = cartItems.reduce((acc, item) => acc + item.quantity, 0);
+  const cartTotal = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
+
+  const addToCart = (product: Product) => {
+    setCartItems(prev => {
+      const existing = prev.find(item => item.id === product.id);
+      if (existing) {
+        return prev.map(item =>
+          item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
+        );
+      }
+      return [...prev, { ...product, quantity: 1 }];
+    });
+  };
+
+  const removeFromCart = (id: number) => {
+    setCartItems(prev => prev.filter(item => item.id !== id));
+  };
+
+  const updateQty = (id: number, qty: number) => {
+    if (qty <= 0) {
+      removeFromCart(id);
+      return;
+    }
+    setCartItems(prev => prev.map(item => item.id === id ? { ...item, quantity: qty } : item));
+  };
+
+  const clearCart = () => setCartItems([]);
+
+  return (
+    <CartContext.Provider value={{ cartItems, cartCount, cartTotal, isCartOpen, setIsCartOpen, addToCart, removeFromCart, updateQty, clearCart }}>
+      {children}
+    </CartContext.Provider>
+  );
+}
+
+export function useCart() {
+  const context = useContext(CartContext);
+  if (context === undefined) {
+    throw new Error("useCart must be used within a CartProvider");
+  }
+  return context;
+}import { Switch, Route, Router as WouterRouter } from "wouter";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { Toaster } from "@/components/ui/toaster";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import NotFound from "@/pages/not-found";
+
+import Home from "./pages/Home";
+import Shop from "./pages/Shop";
+import Contact from "./pages/Contact";
+import Terms from "./pages/Terms";
+import { Navbar } from "./components/Navbar";
+import { Footer } from "./components/Footer";
+import { CartDrawer } from "./components/CartDrawer";
+import { CartProvider, useCart } from "./hooks/useCart";
+import { ShoppingCart } from "lucide-react";
+import { Button } from "@/components/ui/button";
+
+const queryClient = new QueryClient();
+
+function FloatingCart() {
+  const { cartCount, setIsCartOpen } = useCart();
+  return (
+    <Button
+      onClick={() => setIsCartOpen(true)}
+      className="fixed bottom-6 right-6 h-16 w-16 rounded-full bg-primary text-black hover:bg-primary/90 shadow-xl z-40 flex items-center justify-center p-0 border-2 border-black"
+    >
+      <ShoppingCart className="h-7 w-7" />
+      {cartCount > 0 && (
+        <div className="absolute -top-2 -right-2 bg-destructive text-white text-xs font-bold w-6 h-6 rounded-full flex items-center justify-center border-2 border-black">
+          {cartCount}
+        </div>
+      )}
+    </Button>
+  );
+}
+
+function Router() {
+  return (
+    <div className="flex flex-col min-h-screen font-sans">
+      <Navbar />
+      <main className="flex-1">
+        <Switch>
+          <Route path="/" component={Home} />
+          <Route path="/shop" component={Shop} />
+          <Route path="/contact" component={Contact} />
+          <Route path="/terms" component={Terms} />
+          <Route component={NotFound} />
+        </Switch>
+      </main>
+      <Footer />
+      <CartDrawer />
+      <FloatingCart />
+    </div>
+  );
+}
+
+function App() {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <CartProvider>
+          <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, "")}>
+            <Router />
+          </WouterRouter>
+        </CartProvider>
+        <Toaster />
+      </TooltipProvider>
+    </QueryClientProvider>
+  );
+}
+
+export default App;import { Link } from "wouter";
+import { Menu, Phone } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import logoImg from "@assets/1000500959_1780116242325.jpg";
+
+export function Navbar() {
+  return (
+    <nav className="sticky top-0 z-50 w-full border-b-2 border-primary bg-black">
+      <div className="container mx-auto px-4 h-20 flex items-center justify-between">
+        <Link href="/" className="flex items-center gap-3">
+          <img
+            src={logoImg}
+            alt="North West Hope Business Marketing"
+            className="h-14 w-14 rounded-full border-2 border-primary object-cover shadow-[0_0_12px_rgba(255,208,0,0.4)]"
+          />
+          <div className="flex flex-col leading-tight">
+            <span className="font-black text-primary tracking-tight text-lg uppercase leading-none">North West Hope</span>
+            <span className="text-[10px] text-white/60 font-semibold uppercase tracking-widest">Business Marketing</span>
+          </div>
+        </Link>
+
+        <div className="hidden md:flex items-center gap-8">
+          <Link href="/" className="text-white hover:text-primary transition-colors font-bold uppercase text-sm tracking-wider">Home</Link>
+          <Link href="/shop" className="text-white hover:text-primary transition-colors font-bold uppercase text-sm tracking-wider">Shop</Link>
+          <Link href="/contact" className="text-white hover:text-primary transition-colors font-bold uppercase text-sm tracking-wider">Contact</Link>
+        </div>
+
+        <div className="hidden md:flex items-center">
+          <Button asChild className="bg-primary text-black hover:bg-primary/90 font-black rounded-full px-6 h-11 shadow-[0_0_16px_rgba(255,208,0,0.3)]">
+            <a href="tel:0761128528">
+              <Phone className="mr-2 h-4 w-4" />
+              CALL NOW
+            </a>
+          </Button>
+        </div>
+
+        <div className="md:hidden flex items-center">
+          <Sheet>
+            <SheetTrigger asChild>
+              <Button variant="ghost" size="icon" className="text-white">
+                <Menu className="h-6 w-6" />
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="right" className="bg-black border-l border-primary/30 sm:max-w-xs p-6 pt-16">
+              <div className="flex flex-col gap-6">
+                <Link href="/" className="text-white text-lg hover:text-primary font-bold uppercase tracking-wider">Home</Link>
+                <Link href="/shop" className="text-white text-lg hover:text-primary font-bold uppercase tracking-wider">Shop</Link>
+                <Link href="/contact" className="text-white text-lg hover:text-primary font-bold uppercase tracking-wider">Contact</Link>
+                <Button asChild className="bg-primary text-black hover:bg-primary/90 font-black mt-4 rounded-full">
+                  <a href="tel:0761128528">
+                    <Phone className="mr-2 h-4 w-4" />
+                    CALL NOW
+                  </a>
+                </Button>
+              </div>
+            </SheetContent>
+          </Sheet>
+        </div>
+      </div>
+    </nav>
+  );
+}import { Link } from "wouter";
+
+export function Footer() {
+  return (
+    <footer className="bg-black border-t border-white/10">
+      <div className="container mx-auto px-4 py-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <p className="text-white/40 text-sm font-medium">
+          &copy; 2026 North West Hope Business Marketing | All Rights Reserved
+        </p>
+        <Link
+          href="/terms"
+          className="text-primary/70 hover:text-primary text-sm font-bold transition-colors underline underline-offset-4"
+        >
+          Terms &amp; Conditions
+        </Link>
+      </div>
+    </footer>
+  );
+}import { Product } from "../data/products";
+import { useCart } from "../hooks/useCart";
+import { Button } from "@/components/ui/button";
+import { Plus, Minus, ShoppingCart } from "lucide-react";
+import { motion } from "framer-motion";
+
+interface ProductCardProps {
+  product: Product;
+}
+
+export function ProductCard({ product }: ProductCardProps) {
+  const { cartItems, addToCart, updateQty } = useCart();
+  const cartItem = cartItems.find(item => item.id === product.id);
+  const isSamsung = product.category === "samsung";
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.4 }}
+      whileHover={{ y: -6 }}
+      className="group relative rounded-2xl overflow-hidden flex flex-col border border-white/10 hover:border-primary/60 transition-all duration-300 bg-[#0d0d0d] shadow-lg hover:shadow-[0_0_30px_rgba(255,208,0,0.15)]"
+    >
+      <div className="absolute inset-0 rounded-2xl pointer-events-none border border-primary/0 group-hover:border-primary/40 transition-all duration-500 z-10" />
+
+      <div className="relative overflow-hidden bg-gradient-to-br from-white/5 to-white/10">
+        <div className="absolute top-3 left-3 z-20 flex items-center gap-1.5 bg-black/70 backdrop-blur-sm px-2.5 py-1 rounded-full border border-white/10">
+          <span className="w-2 h-2 rounded-full bg-[#00ff88] animate-pulse" />
+          <span className="text-xs font-bold text-white">In Stock</span>
+        </div>
+        <div className="absolute top-3 right-3 z-20 bg-primary px-2.5 py-1 rounded-full shadow-[0_0_10px_rgba(255,208,0,0.4)]">
+          <span className="text-[10px] font-black text-black uppercase tracking-widest">All Tested</span>
+        </div>
+        <div className={`absolute bottom-3 left-3 z-20 px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-widest border ${
+          isSamsung
+            ? "bg-blue-600/80 border-blue-400/30 text-white"
+            : "bg-gray-700/80 border-gray-500/30 text-white"
+        }`}>
+          {isSamsung ? "Samsung" : "iPhone"}
+        </div>
+
+        <img
+          src={product.imageUrl}
+          alt={product.name}
+          className="w-full h-52 object-cover transition-transform duration-700 group-hover:scale-105"
+        />
+        <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-[#0d0d0d] to-transparent" />
+      </div>
+
+      <div className="p-4 flex flex-col flex-1 gap-4">
+        <div>
+          <h3 className="text-base font-black text-white leading-tight tracking-tight">{product.name}</h3>
+          <p className="text-xs text-white/40 font-medium mt-0.5">LCD Screen Replacement</p>
+        </div>
+
+        <div className="flex items-center justify-between">
+          <div className="flex flex-col">
+            <span className="text-xs text-white/40 font-medium">Price</span>
+            <span className="text-2xl font-black text-[#00ff88] leading-none">R{product.price}</span>
+          </div>
+          <div className="bg-primary/10 border border-primary/20 rounded-lg px-3 py-1.5 text-center">
+            <div className="text-[9px] text-primary/70 font-bold uppercase">Free</div>
+            <div className="text-[10px] text-primary font-black uppercase leading-none">Protector</div>
+          </div>
+        </div>
+
+        <div className="mt-auto">
+          {cartItem ? (
+            <div className="flex items-center justify-between bg-white/5 rounded-xl border border-border overflow-hidden">
+              <button
+                onClick={() => updateQty(product.id, cartItem.quantity - 1)}
+                className="flex-1 py-3 flex items-center justify-center text-white hover:text-primary hover:bg-white/5 transition-colors"
+              >
+                <Minus className="h-4 w-4" />
+              </button>
+              <span className="font-black text-white text-lg w-10 text-center">{cartItem.quantity}</span>
+              <button
+                onClick={() => updateQty(product.id, cartItem.quantity + 1)}
+                className="flex-1 py-3 flex items-center justify-center text-white hover:text-primary hover:bg-white/5 transition-colors"
+              >
+                <Plus className="h-4 w-4" />
+              </button>
+            </div>
+          ) : (
+            <Button
+              onClick={() => addToCart(product)}
+              className="w-full bg-primary text-black font-black hover:bg-primary/90 transition-all rounded-xl h-11 text-sm shadow-[0_0_20px_rgba(255,208,0,0.2)] hover:shadow-[0_0_28px_rgba(255,208,0,0.4)]"
+            >
+              <ShoppingCart className="h-4 w-4 mr-2" />
+              Add to Cart
+            </Button>
+          )}
+        </div>
+      </div>
+    </motion.div>
+  );
+}import { useState } from "react";
+import { useCart } from "../hooks/useCart";
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { X, Plus, Minus, ShoppingCart } from "lucide-react";
+
+export function CartDrawer() {
+  const { cartItems, cartTotal, isCartOpen, setIsCartOpen, updateQty, removeFromCart } = useCart();
+  const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
+
+  const handleCheckout = () => {
+    if (cartItems.length === 0) return;
+    let message = `Hello, I want to order:\n\n`;
+    cartItems.forEach(item => {
+      message += `${item.name} LCD x${item.quantity} - R${item.price * item.quantity}\n`;
+    });
+    message += `\nTotal: R${cartTotal}\n\nMy Name: ${name || "Not provided"}\nMy Number: ${phone || "Not provided"}`;
+    window.open(`https://wa.me/27679785028?text=${encodeURIComponent(message)}`, '_blank');
+  };
+
+  return (
+    <Sheet open={isCartOpen} onOpenChange={setIsCartOpen}>
+      <SheetContent className="w-full sm:max-w-md bg-black border-l-border flex flex-col p-0">
+        <SheetHeader className="p-6 border-b border-border text-left">
+          <SheetTitle className="text-white flex items-center gap-2 font-bold text-xl">
+            <ShoppingCart className="text-primary h-5 w-5" />
+            Your Cart
+          </SheetTitle>
+        </SheetHeader>
+
+        <ScrollArea className="flex-1 p-6">
+          {cartItems.length === 0 ? (
+            <div className="flex flex-col items-center justify-center h-40 text-center space-y-4">
+              <div className="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center">
+                <ShoppingCart className="h-8 w-8 text-muted-foreground" />
+              </div>
+              <p className="text-muted-foreground font-medium">Your cart is empty.</p>
+            </div>
+          ) : (
+            <div className="space-y-6">
+              {cartItems.map((item) => (
+                <div key={item.id} className="flex flex-col gap-3 bg-white/5 p-4 rounded-xl border border-white/10">
+                  <div className="flex justify-between items-start gap-4">
+                    <h4 className="font-bold text-white leading-tight">{item.name}</h4>
+                    <Button variant="ghost" size="icon" className="h-6 w-6 text-muted-foreground hover:text-destructive shrink-0 -mt-1 -mr-1" onClick={() => removeFromCart(item.id)}>
+                      <X className="h-4 w-4" />
+                    </Button>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-1 bg-black rounded-lg border border-border px-1">
+                      <Button variant="ghost" size="icon" className="h-8 w-8 text-white hover:text-primary rounded-md" onClick={() => updateQty(item.id, item.quantity - 1)}>
+                        <Minus className="h-3 w-3" />
+                      </Button>
+                      <span className="font-bold text-white w-6 text-center text-sm">{item.quantity}</span>
+                      <Button variant="ghost" size="icon" className="h-8 w-8 text-white hover:text-primary rounded-md" onClick={() => updateQty(item.id, item.quantity + 1)}>
+                        <Plus className="h-3 w-3" />
+                      </Button>
+                    </div>
+                    <span className="font-bold text-[#00ff88]">R{item.price * item.quantity}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </ScrollArea>
+
+        {cartItems.length > 0 && (
+          <div className="p-6 border-t border-border bg-black/50 backdrop-blur-sm space-y-6">
+            <div className="flex justify-between items-center">
+              <span className="text-muted-foreground font-medium">Subtotal</span>
+              <span className="text-2xl font-black text-white">R{cartTotal}</span>
+            </div>
+            <div className="space-y-3">
+              <Input placeholder="Your Name" value={name} onChange={(e) => setName(e.target.value)} className="bg-white/5 border-white/10 text-white placeholder:text-muted-foreground focus-visible:ring-primary" />
+              <Input placeholder="Your Phone Number" value={phone} onChange={(e) => setPhone(e.target.value)} className="bg-white/5 border-white/10 text-white placeholder:text-muted-foreground focus-visible:ring-primary" />
+              <Button onClick={handleCheckout} className="w-full bg-[#25d366] text-black hover:bg-[#25d366]/90 font-bold h-12 text-lg uppercase tracking-wide mt-2">
+                Send Order via WhatsApp
+              </Button>
+            </div>
+          </div>
+        )}
+      </SheetContent>
+    </Sheet>
+  );
+}import { useState } from "react";
+import { products } from "../data/products";
+import { ProductCard } from "../components/ProductCard";
+import { Search } from "lucide-react";
+import { Input } from "@/components/ui/input";
+
+type Tab = "all" | "samsung" | "iphone" | "honor" | "tecno" | "redmi";
+
+const tabs: { id: Tab; label: string; count: number }[] = [
+  { id: "all",     label: "All Models", count: products.length },
+  { id: "samsung", label: "Samsung",    count: products.filter(p => p.category === "samsung").length },
+  { id: "iphone",  label: "iPhone",     count: products.filter(p => p.category === "iphone").length },
+  { id: "honor",   label: "Honor",      count: products.filter(p => p.category === "honor").length },
+  { id: "tecno",   label: "Tecno",      count: products.filter(p => p.category === "tecno").length },
+  { id: "redmi",   label: "Redmi",      count: products.filter(p => p.category === "redmi").length },
+];
+
+export default function Shop() {
+  const [searchQuery, setSearchQuery] = useState("");
+  const [activeTab, setActiveTab] = useState<Tab>("all");
+
+  const filteredProducts = products.filter(product => {
+    const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesTab = activeTab === "all" || product.category === activeTab;
+    return matchesSearch && matchesTab;
+  });
+
+  return (
+    <div className="min-h-screen bg-black pb-24">
+      <div className="bg-[#0a0a0a] py-12 border-b border-border">
+        <div className="container mx-auto px-4">
+          <h1 className="text-4xl md:text-5xl font-black text-white uppercase tracking-tight text-center mb-2">
+            Screen <span className="text-primary">Prices</span>
+          </h1>
+          <p className="text-center text-white/40 font-medium mb-8 text-sm">
+            {products.length} screens in stock — All Tested
+          </p>
+          <div className="max-w-2xl mx-auto relative">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground h-5 w-5" />
+            <Input
+              type="text"
+              placeholder="Search by phone model..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full h-14 pl-12 bg-black border-2 border-border focus-visible:border-primary text-white text-base rounded-xl"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div className="container mx-auto px-4 pt-10">
+        <div className="flex gap-3 mb-10 overflow-x-auto pb-2 scrollbar-hide justify-start md:justify-center">
+          {tabs.map(tab => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={`flex-shrink-0 px-5 py-2.5 rounded-full font-black text-sm uppercase tracking-wider transition-all duration-200 flex items-center gap-2 ${
+                activeTab === tab.id
+                  ? "bg-primary text-black shadow-[0_0_16px_rgba(255,208,0,0.3)]"
+                  : "bg-white/5 text-white/60 hover:bg-white/10 hover:text-white border border-white/10"
+              }`}
+            >
+              {tab.label}
+              <span className={`text-[10px] font-black px-1.5 py-0.5 rounded-full ${
+                activeTab === tab.id ? "bg-black/20 text-black" : "bg-white/10 text-white/40"
+              }`}>
+                {tab.count}
+              </span>
+            </button>
+          ))}
+        </div>
+
+        <p className="text-white/30 text-sm font-medium mb-6">
+          Showing {filteredProducts.length} {filteredProducts.length === 1 ? "result" : "results"}
+          {searchQuery && ` for "${searchQuery}"`}
+        </p>
+
+        {filteredProducts.length > 0 ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+            {filteredProducts.map(product => (
+              <ProductCard key={product.id} product={product} />
+            ))}
+          </div>
+        ) : (
+          <div className="text-center py-24">
+            <div className="text-5xl mb-4">🔍</div>
+            <h3 className="text-2xl font-black text-white mb-2">No models found</h3>
+            <p className="text-muted-foreground font-medium">
+              Try a different search or{" "}
+              <a href="https://wa.me/27679785028" target="_blank" rel="noreferrer" className="text-[#25d366] underline">ask us on WhatsApp</a>
+              {" "}if you don't see your device.
+            </p>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}import { MapPin, Phone, MessageCircle, Facebook } from "lucide-react";
+import { Button } from "@/components/ui/button";
+
+export default function Contact() {
+  return (
+    <div className="min-h-screen bg-black py-16 md:py-24">
+      <div className="container mx-auto px-4 max-w-5xl">
+        <div className="text-center mb-16">
+          <h1 className="text-4xl md:text-6xl font-black text-white uppercase tracking-tight mb-4">Find Us</h1>
+          <div className="w-24 h-2 bg-primary mx-auto rounded-full"></div>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+          <div className="bg-card border border-border rounded-3xl p-8 md:p-12 relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
+            <div className="relative z-10 space-y-10">
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
+                  <MapPin className="h-6 w-6 text-primary" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-white mb-2">Our Shop</h3>
+                  <p className="text-muted-foreground font-medium leading-relaxed">
+                    Shop 6, Commissioner Street<br />
+                    (CellC Container, Behind Western Bazaar)<br />
+                    Klerksdorp, North West
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
+                  <Phone className="h-6 w-6 text-primary" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-white mb-2">Call Us</h3>
+                  <a href="tel:0761128528" className="text-2xl font-black text-white hover:text-primary transition-colors">
+                    076 112 8528
+                  </a>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 rounded-full bg-[#25d366]/10 flex items-center justify-center shrink-0">
+                  <MessageCircle className="h-6 w-6 text-[#25d366]" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-white mb-2">WhatsApp</h3>
+                  <a href="https://wa.me/27679785028" target="_blank" rel="noreferrer" className="text-2xl font-black text-white hover:text-[#25d366] transition-colors">
+                    067 978 5028
+                  </a>
+                </div>
+              </div>
+
+              <div className="pt-8 border-t border-border">
+                <h3 className="text-lg font-bold text-white mb-6 uppercase tracking-wider">Connect With Us</h3>
+                <div className="flex flex-wrap gap-4">
+                  <Button asChild className="bg-[#25d366] text-black hover:bg-[#25d366]/90 font-bold">
+                    <a href="https://wa.me/27679785028" target="_blank" rel="noreferrer">
+                      <MessageCircle className="mr-2 h-4 w-4" /> WhatsApp
+                    </a>
+                  </Button>
+                  <Button asChild className="bg-primary text-black hover:bg-primary/90 font-bold">
+                    <a href="tel:0761128528">
+                      <Phone className="mr-2 h-4 w-4" /> Call Now
+                    </a>
+                  </Button>
+                  <Button asChild className="bg-[#1877f2] text-white hover:bg-[#1877f2]/90 font-bold">
+                    <a href="https://www.facebook.com/share/1JAx3hwvnT/" target="_blank" rel="noreferrer">
+                      <Facebook className="mr-2 h-4 w-4" /> Facebook
+                    </a>
+                  </Button>
+                  <Button asChild className="bg-[#ff0050] text-white hover:bg-[#ff0050]/90 font-bold">
+                    <a href="https://www.tiktok.com/@northwesthope04" target="_blank" rel="noreferrer">
+                      TikTok
+                    </a>
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-card border border-border rounded-3xl overflow-hidden relative flex flex-col" style={{ minHeight: 420 }}>
+            <div className="absolute inset-0 opacity-20"
+              style={{
+                backgroundImage: "linear-gradient(rgba(255,208,0,0.4) 1px, transparent 1px), linear-gradient(90deg, rgba(255,208,0,0.4) 1px, transparent 1px)",
+                backgroundSize: "30px 30px",
+              }}
+            />
+            <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent" />
+            <div className="relative z-10 flex flex-col items-center justify-center flex-1 p-8 text-center gap-6">
+              <div className="relative">
+                <div className="absolute inset-0 rounded-full bg-primary/30 animate-ping" style={{ animationDuration: "2s" }} />
+                <div className="relative w-16 h-16 rounded-full bg-primary/20 border-2 border-primary/40 flex items-center justify-center">
+                  <MapPin className="h-8 w-8 text-primary" />
+                </div>
+              </div>
+              <div>
+                <h3 className="text-2xl font-
